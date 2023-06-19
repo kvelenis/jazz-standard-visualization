@@ -9,4 +9,4 @@ Additionally, the repository includes a player that facilitates play-along purpo
 
 The repository encompasses the necessary code, data files, and documentation to reproduce the visualization, customize its features, and utilize the play-along functionality.
 
-For access to the full dataset used in this visualization and play-along system, please contact us at [insert contact information or specify where to request the data]. We will be happy to provide you with the dataset for further exploration and analysis.
+For access to the full dataset used in this visualization and play-along system, please contact us. We will be happy to provide you with the dataset for further exploration and analysis.
