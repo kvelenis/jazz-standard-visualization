@@ -36,22 +36,32 @@ function apply_global_names_list(resp){
 }
 send_request_get_response( location.href + 'nameslist', apply_global_names_list );
 
-function lstm_tsne_3D_tonalities(response) {
-  function getinfosstruct(respo) {
-    infostructure = respo;
-    initialise_plotly_chart(response, nameslist, respo);
-  }
-  send_request_get_response(location.href + 'infostructure', getinfosstruct);
-}
+// function lstm_tsne_3D_tonalities(response) {
+//   function getinfosstruct(respo) {
+//     infostructure = respo;
+//     initialise_plotly_chart(response, nameslist, respo);
+//   }
+//   send_request_get_response(location.href + 'infostructure', getinfosstruct);
+// }
 
-function lstm_tsne_3D_neutral(response) {
+// function lstm_tsne_3D_neutral(response) {
+//   function getinfosstruct(respo) {
+//     infostructure = respo;
+//     initialise_plotly_chart(response, nameslist, respo);
+//   }
+//   send_request_get_response(location.href + 'infostructure', getinfosstruct);
+// }
+// send_request_get_response(location.href + 'lstm_tsne_3D_neutral', lstm_tsne_3D_neutral);
+
+
+function mask_visualization_data(response) {
   function getinfosstruct(respo) {
     infostructure = respo;
     initialise_plotly_chart(response, nameslist, respo);
   }
-  send_request_get_response(location.href + 'infostructure', getinfosstruct);
+  send_request_get_response(location.href + 'mask_visualization_data', getinfosstruct);
 }
-send_request_get_response(location.href + 'lstm_tsne_3D_neutral', lstm_tsne_3D_neutral);
+send_request_get_response(location.href + 'mask_visualization_data', mask_visualization_data);
 
 
 
@@ -60,107 +70,91 @@ send_request_get_response(location.href + 'lstm_tsne_3D_neutral', lstm_tsne_3D_n
 
 
 function initialise_plotly_chart(response, nameslist, infostructure) {
-
+    console.log("RESPONSE - FORM:",response, Object.values(response)[0])
+    console.log("RESPONSE - STYLE:",response.style)
+    console.log("RESPONSE - YEAR:",response.year)
+    console.log("RESPONSE - TITLES:",response.titles)
     nameslistNoUnderbar = [];
 
     for (i=0; i<nameslist.length; i++) {
         nameslistNoUnderbar.push(nameslist[i].replaceAll("_", " "));
     }
 
-    function RGBToHex(r,g,b) {
-      r = Math.floor(r * 255).toString(16);
-      g = Math.floor(g * 255).toString(16);
-      b = Math.floor(b * 255).toString(16);
-
-      if (r.length == 1)
-        r = "0" + r;
-      if (g.length == 1)
-        g = "0" + g;
-      if (b.length == 1)
-        b = "0" + b;
-
-      return "#" + r + g + b;
+    function RGBAToHex(r, g, b, a) {
+      r = Math.floor(r * 255);
+      g = Math.floor(g * 255);
+      b = Math.floor(b * 255);
+      a = Math.floor(a * 255);
+    
+      var rHex = ("0" + r.toString(16)).slice(-2);
+      var gHex = ("0" + g.toString(16)).slice(-2);
+      var bHex = ("0" + b.toString(16)).slice(-2);
+      var aHex = ("0" + a.toString(16)).slice(-2);
+    
+      return "#" + rHex + gHex + bHex + aHex;
     }
+    
 
-    x_axis = [];
-    y_axis = [];
-    z_axis = [];
+    x_axis_form = [];
+    y_axis_form = [];
+    colors_form = [];
 
-    colors = [];
-    cminst_color = [];
+    x_axis_style = [];
+    y_axis_style = [];
+    colors_style = [];
+
+    x_axis_year = [];
+    y_axis_year = [];
+    colors_year = [];
+    
     symbol = [];
-    if (typeof(response.hh) != "undefined") {
+    if (typeof(response.form) != "undefined") {
       //FOR ALPHA & BETA POLE
-      document.getElementsByClassName("user-select-none")[0].classList.remove("hidden");
-      for (i=0; i<response.hh.length; i++) {
-         x_axis.push(response.hh[i][0]);
-         y_axis.push(response.hh[i][1]);
-         z_axis.push(response.z[i]);
-         colors.push(RGBToHex(response.c[i][0],response.c[i][1],response.c[i][2]));
+      // document.getElementsByClassName("user-select-none")[0].classList.remove("hidden");
+      
+      for (i=0; i<response.form.coordinates.length; i++) {
+        x_axis_form.push(response.form.coordinates[i][0]);
+        y_axis_form.push(response.form.coordinates[i][1]);
+        colors_form.push(RGBAToHex(response.form.colors[i][0],response.form.colors[i][1],response.form.colors[i][2],response.form.colors[i][3]));
       }
-    } else if (typeof(response.hh) == "undefined") {
-      for (i=0; i<response.length; i++) {
-         x_axis.push(response[i][0]);
-         y_axis.push(response[i][1]);
-         z_axis.push(response[i][2]);
-         cminst_color.push(0.5);
-       }
-    }
+
+      for (i=0; i<response.style.coordinates.length; i++) {
+        x_axis_style.push(response.style.coordinates[i][0]);
+        y_axis_style.push(response.style.coordinates[i][1]);
+        colors_style.push(RGBAToHex(response.style.colors[i][0],response.style.colors[i][1],response.style.colors[i][2],response.style.colors[i][3]));
+      }
+      
+      for (i=0; i<response.year.coordinates.length; i++) {
+        x_axis_year.push(response.year.coordinates[i][0]);
+        y_axis_year.push(response.year.coordinates[i][1]);
+        colors_year.push(RGBAToHex(response.year.colors[i][0],response.year.colors[i][1],response.year.colors[i][2],response.year.colors[i][3]));
+        
+      }
+      console.log(colors_year);
+    } 
+    // else if (typeof(response.hh) == "undefined") {
+    //   for (i=0; i<response.length; i++) {
+    //      x_axis.push(response[i][0]);
+    //      y_axis.push(response[i][1]);
+    //      cminst_color.push(0.5);
+    //    }
+    // }
     customdata = [];
     for (i=0; i<Object.keys(infostructure).length; i++) {
       customdata.push("Style: "+infostructure[Object.keys(infostructure)[i]].style+"<br>Tonality: "+infostructure[Object.keys(infostructure)[i]].tonality+"</br>");
     }
 
     var myPlot = d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/3d-scatter.csv', function(err, rows) {
-  function unpack(rows, key) {
-    return rows.map(function(row) {
-      return row[key];
-    });
-  }
-
- 
 
   // Create initial trace
   var trace1 = {
-    x: x_axis,
-    y: y_axis,
+    x: x_axis_form,
+    y: y_axis_form,
     mode: 'markers',
     marker: {
       opacity: 0.8,
-      size: 2,
-      color: colors,
-    },
-    hovertemplate: '<br>%{text}</br>' +
-      '<b>%{customdata}</b>' +
-      "<extra></extra>",
-    customdata: customdata,
-    text: nameslistNoUnderbar,
-    type: 'scatter'
-  };
-  var trace2 = {
-    x: x_axis,
-    y: z_axis,
-    mode: 'markers',
-    marker: {
-      opacity: 0.8,
-      size: 2,
-      color: colors,
-    },
-    hovertemplate: '<br>%{text}</br>' +
-      '<b>%{customdata}</b>' +
-      "<extra></extra>",
-    customdata: customdata,
-    text: nameslistNoUnderbar,
-    type: 'scatter'
-  };
-  var trace3 = {
-    x: z_axis,
-    y: y_axis,
-    mode: 'markers',
-    marker: {
-      opacity: 0.8,
-      size: 2,
-      color: colors,
+      size: 4,
+      color: colors_form,
     },
     hovertemplate: '<br>%{text}</br>' +
       '<b>%{customdata}</b>' +
@@ -196,9 +190,9 @@ function initialise_plotly_chart(response, nameslist, infostructure) {
 
   // Create dropdown menu options
   var dropdownOptions = [
-    { text: 'Trace 1', value: 'trace1' },
-    { text: 'Trace 2', value: 'trace2' },
-    { text: 'Trace 3', value: 'trace3' }
+    { text: 'Form', value: 'form_selector' },
+    { text: 'Style', value: 'style_selector' },
+    { text: 'Year', value: 'year_selector' }
     // Add more options as needed
   ];
 
@@ -221,15 +215,15 @@ function initialise_plotly_chart(response, nameslist, infostructure) {
     var newTrace;
 
     // Define the properties of the selected trace based on the dropdown value
-    if (selectedTrace === 'trace1') {
+    if (selectedTrace === 'form_selector') {
       newTrace = {
-        x: x_axis,
-        y: y_axis,
+        x: x_axis_form,
+        y: y_axis_form,
         mode: 'markers',
         marker: {
           opacity: 0.8,
-          size: 2,
-          color: colors,
+          size: 4,
+          color: colors_form,
         },
         hovertemplate: '<br>%{text}</br>' +
           '<b>%{customdata}</b>' +
@@ -238,16 +232,16 @@ function initialise_plotly_chart(response, nameslist, infostructure) {
         text: nameslistNoUnderbar,
         type: 'scatter'
       };
-    } else if (selectedTrace === 'trace2') {
+    } else if (selectedTrace === 'style_selector') {
       // Define the properties of the second trace
       newTrace = {
-        x: z_axis,
-        y: y_axis,
+        x: x_axis_style,
+        y: y_axis_style,
         mode: 'markers',
         marker: {
           opacity: 0.8,
-          size: 2,
-          color: colors,
+          size: 4,
+          color: colors_style,
         },
         hovertemplate: '<br>%{text}</br>' +
           '<b>%{customdata}</b>' +
@@ -256,16 +250,16 @@ function initialise_plotly_chart(response, nameslist, infostructure) {
         text: nameslistNoUnderbar,
         type: 'scatter'
       };
-    } else if (selectedTrace === 'trace3') {
+    } else if (selectedTrace === 'year_selector') {
       // Define the properties of the third trace
       newTrace = {
-        x: z_axis,
-        y: x_axis,
+        x: x_axis_year,
+        y: y_axis_year,
         mode: 'markers',
         marker: {
           opacity: 0.8,
-          size: 2,
-          color: colors,
+          size: 4,
+          color: colors_year,
         },
         hovertemplate: '<br>%{text}</br>' +
           '<b>%{customdata}</b>' +

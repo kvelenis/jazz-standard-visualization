@@ -1,19 +1,123 @@
+/* GLOBAL & BODY Rules */
 * {
   font-weight: 200;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 span {
   font-size: 1.3rem;
 }
 
+/* FOOTER Rules */
+
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3px;
+  background-color: #628765;
+  color: white;
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+.footer__main-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+
+}
+
+.footer__ccm-logo {
+  width: 40px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+/* TOOLTIP Rules */
+
+/* Tooltip container */
+.jazz-standard-visualization__tooltip {
+  font-size: 1rem;
+	text-decoration: underline;
+  position: relative;
+  display: inline-block;
+  /* border-bottom: 1px dotted black; If you want dots under the hoverable text */
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+/* Tooltip text */
+.jazz-standard-visualization__tooltip .jazz-standard-visualization__tooltiptext {
+	font-size: 0.8rem;
+  visibility: hidden;
+  width: 300px;
+  background-color: #555;
+  color: #fff;
+  text-align: left;
+  padding: 5px;
+  border-radius: 6px;
+
+  /* Position the tooltip text */
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -150px;
+
+  /* Fade in tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.jazz-standard-visualization__tooltip .jazz-standard-visualization__tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.jazz-standard-visualization__tooltip:hover .jazz-standard-visualization__tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* NAVIGATION Rules */
+
+.nav-item {
+  display: flex;
+  align-items: center;
+}
+
+.navbar {
+	justify-content: center!important;
+  cursor: pointer;
+}
+
+/* MAIN CONTAINERS Rules */
+
 .main__container {
   display: flex;
   justify-content: center;
+  flex-direction: column;
 }
 
 .secondary__container {
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   justify-content: space-between;
   position: relative;
 }
@@ -32,30 +136,39 @@ span {
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin: auto;
 }
 
 .plot__container {
-  min-width: 600px;
-  height: 600px!important;
-  max-width: 600px;
+  min-width: 700px;
+  height: 700px!important;
+  max-width: 700px;
   margin: 0 auto;
 }
 
-.navbar {
-	justify-content: center!important;
-  cursor: pointer;
+.dropdown__menu {
+  display: flex;
+  margin: auto;
+  width: 100px;
+  justify-content: center;
+}
+
+.plot__empty-space {
+  width: 100px;
 }
 
 .title__main-container {
-  width:480;
-  height: 100px;
+  width:600px;
+  /* height: 100px; */
   display: flex;
   justify-content: space-between;
   font-size: 1.3rem;
   font-weight: 200;
-  margin-top: 120px;
+  /* margin-top: 120px; */
   align-items: center;
   position: relative;
+  margin: auto;
+  margin-top: -40px;
 
 }
 
@@ -68,10 +181,12 @@ span {
 }
 
 .main__info-icon {
+  color: tan;
   cursor: pointer;
-  position: absolute;
+  display: flex;
+  /* position: absolute;
   top: 120px;
-  right: 20px;
+  right: 20px; */
 }
 
 .title__song-name {
@@ -128,6 +243,7 @@ span {
   justify-content: center;
   align-items: center;
   flex-direction: row;
+  margin: auto;
 }
 
 .infos__pole-selectors-container {
@@ -226,6 +342,13 @@ span {
   margin-bottom: 5px;
 }
 
+.player__overall-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: 10px;
+}
+
 .infos__play-message {
   margin: auto;
 }
@@ -233,7 +356,8 @@ span {
 .player__main-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 80px;
+  margin-bottom: 5px;
+  /* flex-direction: column; */
 }
 
 .player__play-button__container {
@@ -246,7 +370,7 @@ span {
 .player__chord-progression__container {
   display: flex;
   border: 1px black solid;
-  width: 88px;
+  width: 73px;
   justify-content: center;
   align-items: center;
   font-size: 1.5rem;
@@ -276,8 +400,8 @@ span {
   cursor: pointer;
   text-indent: -999999px;
   display: inline-block;
-  width: 80px;
-	height: 80px;
+  width: 73px;
+	height: 73px;
   padding: 10px 20px;
   z-index: 2;
   background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMiAyNHYtMjRsMjAgMTItMjAgMTJ6Ii8+PC9zdmc+);

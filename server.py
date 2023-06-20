@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, jsonify
 from flask_cors import CORS
+import numpy as np
 import pickle
 import json
 import os
@@ -21,6 +22,8 @@ with open('data/clusters_lstm_3D_neutral.pickle', 'rb') as handle:
     clusters_lstm_3D_neutral_raw = pickle.load(handle)
 with open('data/chart_info_structs.pickle', 'rb') as handle:
     chart_info_structs = pickle.load(handle)
+with open('data/mask_visualization_data.pickle', 'rb') as handle:
+    mask_visualization_data_raw = pickle.load(handle)
 
 api = Flask(__name__)
 CORS(api)
@@ -365,6 +368,24 @@ def get_clusters_lstm_3D_neutral():
     clusters_lstm_3D_neutral = clusters_lstm_3D_neutral_raw;
     return jsonify(clusters_lstm_3D_neutral);
 
+
+# NEW CODE 
+# Custom JSONEncoder class to handle serialization of NumPy arrays
+class NumpyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()  # Convert NumPy array to list
+        return super(NumpyEncoder, self).default(obj)
+
+@api.route('/mask_visualization_data', methods=['GET'])
+def get_mask_visualization_data():
+    converted_dict = {}
+    for key, value in mask_visualization_data_raw.items():
+        converted_dict[key] = value
+
+    # Serialize the converted dictionary using custom JSONEncoder
+    return json.dumps(converted_dict, cls=NumpyEncoder)
+
 # # for tackling CORS etc
 #FRONTEND_HOST = "http://155.207.188.7:1234"
 #@api.after_request
@@ -407,5 +428,5 @@ def after_request(response):
 
 if __name__ == '__main__':
     # api.run()
-    api.run(host='0.0.0.0', port=5000, debug=True)
+    api.run(host='0.0.0.0', port=5001, debug=True)
     # api.run(ssl_context=('/home/maximos/Documents/SSL_certificates/server.crt', '/home/maximos/Documents/SSL_certificates/server.key'), host='0.0.0.0', port=5000, debug=True)
